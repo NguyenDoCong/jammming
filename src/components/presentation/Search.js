@@ -1,20 +1,26 @@
 import React, { useEffect, useState } from 'react';
+import Connect from './connect';
 
 export default function Search(props) {
     const [searchQuery, setSearchQuery] = useState("");
     const handleChange = (event) => {
         setSearchQuery(event.target.value);
     }
+    // console.log("Access token:", props.authorizationCode);
+
     const handleSubmit = async event => {
         event.preventDefault();
-        const endpoint = `https://api.spotify.com/v1/search?q=${searchQuery}&type=track`;
+        const token = await Connect.getToken(props.authorizationCode);
+        props.setToken(token);
+        console.log(token);
+
+        const endpoint = `https://api.spotify.com/v1/search?q=${encodeURIComponent(searchQuery)}&type=track`;
 
         try {
             const response = await fetch(endpoint, {
-                method: 'GET', headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + props.accessToken
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + token // Sử dụng token từ callback
                 }
             });
             if (response.ok) {

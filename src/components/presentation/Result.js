@@ -4,6 +4,7 @@ import styles from 'components/presentation/css/Result.module.css';
 export default function Result(props) {
     const handleClick = (track) => {
         props.setPlaylist(prev => [...prev, track]);
+        // console.log(track.id);
     }
 
     return (
@@ -15,6 +16,7 @@ export default function Result(props) {
                         <div className={styles.alignLeft}>
                             <h1>{track.name}</h1>
                             <p>{track.artists.map(artist => artist.name).join(' - ')}</p>
+                            <p>{track.items}</p>
                         </div>
                         <span className={styles.gap}></span>
                         <button onClick={()=>handleClick(track)}>+</button>
